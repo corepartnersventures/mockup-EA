@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Up design - EA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', 'Tajawal', sans-serif; }
+    [dir="rtl"] { font-family: 'Tajawal', 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <!-- TOP BANNER -->
+  <div class="bg-red-600 text-white text-xs py-1 px-4 text-center font-medium">
+    <span id="bannerText">Welcome to Mock Up design - EA — The UAE's #1 Marketplace Platform</span>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <!-- LOGO -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+        <div class="bg-gradient-to-tr from-red-600 to-amber-500 text-white p-2 rounded-xl shadow-md">
+          <i class="fa-solid fa-fire text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-xl tracking-tight text-gray-900 leading-none">Mock Up</h1>
+          <span class="text-xs font-semibold text-red-600 tracking-widest uppercase">design - EA</span>
+        </div>
+      </div>
+
+      <!-- EMIRATE SELECTOR & SEARCH -->
+      <div class="hidden md:flex items-center flex-1 max-w-2xl bg-gray-100 rounded-lg border border-gray-300 overflow-hidden focus-within:border-red-500 focus-within:bg-white transition">
+        <div class="flex items-center gap-2 px-3 py-2 border-r border-gray-300 text-sm font-medium text-gray-700 bg-gray-50">
+          <i class="fa-solid fa-location-dot text-red-600"></i>
+          <select id="emirateSelect" class="bg-transparent focus:outline-none cursor-pointer" onchange="renderListings()">
+            <option value="All UAE">All UAE</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+            <option value="Sharjah">Sharjah</option>
+            <option value="Ajman">Ajman</option>
+          </select>
+        </div>
+        <input type="text" id="searchInput" placeholder="Search for Cars, Apartments, Jobs, Mobiles..." class="flex-1 px-4 py-2 bg-transparent text-sm focus:outline-none" oninput="handleSearch()">
+        <button class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 font-medium transition flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+
+      <!-- ACTIONS & USER AUTH -->
+      <div class="flex items-center gap-3">
+        <!-- LANGUAGE TOGGLE -->
+        <button onclick="toggleLanguage()" class="text-xs font-bold border border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-100 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-globe text-red-600"></i>
+          <span id="langBtnText">عربي</span>
+        </button>
+
+        <!-- USER ACCOUNT -->
+        <div id="authArea" class="flex items-center gap-2">
+          <button onclick="openAuthModal('signin')" class="text-sm font-semibold text-gray-700 hover:text-red-600 px-3 py-2 transition" id="signInNav">Sign In</button>
+          <button onclick="openAuthModal('signup')" class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition" id="signUpNav">Sign Up</button>
+        </div>
+
+        <div id="userProfileArea" class="hidden items-center gap-3">
+          <div class="flex items-center gap-2 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-sm" id="userAvatar">U</div>
+            <div class="text-left">
+              <p class="text-xs font-bold text-gray-900 truncate max-w-[100px]" id="userNameDisplay">User Name</p>
+              <span class="text-[10px] uppercase bg-red-200 text-red-800 px-1 rounded font-semibold" id="userRoleBadge">Seller</span>
+            </div>
+          </div>
+          <button onclick="logoutUser()" class="text-gray-500 hover:text-red-600 p-2 text-sm" title="Sign Out"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+
+        <!-- POST AN AD BUTTON -->
+        <button onclick="openPostModal()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-sm font-bold px-4 py-2 rounded-lg shadow transition flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i>
+          <span id="postAdNav">POST AN AD</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- CATEGORY NAVIGATION BAR -->
+    <div class="bg-white border-t border-gray-100 px-4 py-2 shadow-inner">
+      <div class="max-w-7xl mx-auto flex items-center gap-8 overflow-x-auto text-sm font-medium text-gray-600 scrollbar-none">
+        <button onclick="filterCategory('All')" class="hover:text-red-600 whitespace-nowrap pb-1 border-b-2 border-red-600 text-red-600 font-semibold" id="catAllBtn">All Categories</button>
+        <button onclick="filterCategory('Motors')" class="hover:text-red-600 whitespace-nowrap pb-1" id="catMotorsBtn">Motors</button>
+        <button onclick="filterCategory('Property')" class="hover:text-red-600 whitespace-nowrap pb-1" id="catPropertyBtn">Property</button>
+        <button onclick="filterCategory('Jobs')" class="hover:text-red-600 whitespace-nowrap pb-1" id="catJobsBtn">Jobs</button>
+        <button onclick="filterCategory('Mobiles')" class="hover:text-red-600 whitespace-nowrap pb-1" id="catMobilesBtn">Mobiles & Electronics</button>
+        <button onclick="filterCategory('Services')" class="hover:text-red-600 whitespace-nowrap pb-1" id="catServicesBtn">Services</button>
+        <button onclick="filterCategory('Community')" class="hover:text-red-600 whitespace-nowrap pb-1" id="catCommunityBtn">Community</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO BANNER -->
+  <section class="bg-gradient-to-r from-slate-900 via-gray-900 to-red-950 text-white py-12 px-4 shadow-lg mb-8">
+    <div class="max-w-7xl mx-auto text-center">
+      <span class="bg-red-600/30 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-red-500/30" id="heroBadge">UAE's #1 Marketplace</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight" id="heroTitle">Buy and Sell Anything in the UAE</h2>
+      <p class="text-gray-300 mt-2 max-w-xl mx-auto text-sm md:text-base" id="heroDesc">From luxury villas in Dubai and pristine SUVs in Abu Dhabi to electronics and jobs across Sharjah — find it all here.</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 mb-16">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-bold text-gray-900" id="sectionTitle">Classified Listings</h3>
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-medium text-gray-500" id="sortLabel">Sort:</span>
+        <select id="sortSelect" onchange="renderListings()" class="bg-white border border-gray-300 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-red-500">
+          <option value="newest" id="sortNewest">Newest First</option>
+          <option value="low-high" id="sortLowHigh">Price: Low to High</option>
+          <option value="high-low" id="sortHighLow">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- LISTINGS GRID -->
+    <div id="listingsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Dynamically Rendered Listings -->
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-gray-300 mt-4">
+      <i class="fa-solid fa-box-open text-5xl text-gray-300 mb-3"></i>
+      <h4 class="text-lg font-bold text-gray-700" id="noListings">No listings found</h4>
+      <p class="text-sm text-gray-500 mt-1" id="noListingsSub">Try adjusting your search criteria or post the first ad in this category!</p>
+      <button onclick="openPostModal()" class="mt-4 bg-red-600 text-white font-semibold px-5 py-2 rounded-lg text-sm hover:bg-red-700 transition" id="postAdNow">Post an Ad Now</button>
+    </div>
+  </main>
+
+  <!-- SOCIAL MEDIA & WHATSAPP CONNECTION FOOTER BANNER -->
+  <section class="bg-white border-t border-gray-200 py-10 px-4 mb-12 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <h4 class="text-lg font-bold text-gray-900" id="socialConnectTitle">Connect Your Social Accounts & WhatsApp</h4>
+        <p class="text-sm text-gray-500 mt-1" id="socialConnectSub">Instantly link buyers directly to your WhatsApp, Instagram, and Facebook profile.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://wa.me/971500000000" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 shadow transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp Direct
+        </a>
+        <a href="https://instagram.com" target="_blank" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 shadow transition">
+          <i class="fa-brands fa-instagram text-lg"></i> Instagram
+        </a>
+        <a href="https://facebook.com" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 shadow transition">
+          <i class="fa-brands fa-facebook text-lg"></i> Facebook
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 py-12 px-4 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-red-600 text-white p-1.5 rounded-lg">
+            <i class="fa-solid fa-fire"></i>
+          </div>
+          <span class="text-white font-bold text-lg">Mock Up design - EA</span>
+        </div>
+        <p class="text-xs leading-relaxed" id="footerAbout">The leading classifieds platform for buying and selling autos, real estate, electronics, and connecting buyers with trusted sellers across the UAE.</p>
+      </div>
+      <div>
+        <h5 class="text-white font-semibold text-sm mb-3" id="footerPopular">Popular Categories</h5>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#" onclick="filterCategory('Motors')" class="hover:text-white">Cars for Sale in Dubai</a></li>
+          <li><a href="#" onclick="filterCategory('Property')" class="hover:text-white">Villas & Apartments for Rent</a></li>
+          <li><a href="#" onclick="filterCategory('Mobiles')" class="hover:text-white">Smartphones & Laptops</a></li>
+          <li><a href="#" onclick="filterCategory('Jobs')" class="hover:text-white">Job Openings in UAE</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-white font-semibold text-sm mb-3" id="footerSupport">Customer Support</h5>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#" class="hover:text-white">Contact EA Support</a></li>
+          <li><a href="#" class="hover:text-white">Safety & Trust Center</a></li>
+          <li><a href="#" class="hover:text-white">Terms & Conditions</a></li>
+          <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-white font-semibold text-sm mb-3" id="footerMonetize">Seller Monetization</h5>
+        <p class="text-xs mb-3" id="footerMonetizeDesc">Feature your ads starting at only 0.99 AED/day for maximum buyer views and instant sales!</p>
+        <button onclick="openPostModal()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition" id="footerPostBtn">Post Free Ad Now</button>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+      &copy; 2026 Mock Up design - EA. All rights reserved. Powered by Core Partners Ventures FZC LLC.
+    </div>
+  </footer>
+
+  <!-- AUTH MODAL (SIGN IN / SIGN UP WITH OTP) -->
+  <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-scaleUp">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+      
+      <div id="authStep1">
+        <h3 class="text-xl font-bold text-gray-900 mb-1" id="authTitle">Sign In to Mock Up design</h3>
+        <p class="text-xs text-gray-500 mb-6" id="authSub">Enter your details to receive an instant verification code (OTP).</p>
+        
+        <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+          <div id="nameFieldGroup" class="hidden">
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelName">Full Name *</label>
+            <input type="text" id="authNameInput" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500" placeholder="e.g. Emily Grace">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelEmail">Email Address or Phone *</label>
+            <input type="text" id="authContactInput" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500" placeholder="name@example.com or +971 50 123 4567">
+          </div>
+
+          <div id="roleFieldGroup" class="hidden">
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelRole">I am a *</label>
+            <select id="authRoleSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500 bg-white">
+              <option value="Buyer">Buyer / Customer</option>
+              <option value="Seller">Seller / Dealer</option>
+            </select>
+          </div>
+
+          <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg text-sm shadow transition">Send OTP Code</button>
+        </form>
+
+        <div class="mt-4 text-center text-xs">
+          <span id="authToggleText" class="text-gray-500">Don't have an account?</span>
+          <button onclick="toggleAuthMode()" class="text-red-600 font-bold ml-1 hover:underline" id="authToggleBtn">Sign Up</button>
+        </div>
+      </div>
+
+      <!-- OTP VERIFICATION STEP -->
+      <div id="authStep2" class="hidden text-center">
+        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-1">Enter Verification Code</h3>
+        <p class="text-xs text-gray-500 mb-6">We've sent a 4-digit OTP code to your email/phone. (Demo OTP: <span class="font-bold text-red-600">1234</span>)</p>
+
+        <form onsubmit="handleOtpVerify(event)" class="space-y-4">
+          <div class="flex justify-center gap-3">
+            <input type="text" maxlength="4" id="otpInput" required class="w-36 text-center tracking-widest text-2xl font-bold px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-red-500 bg-gray-50" placeholder="1234">
+          </div>
+          <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg text-sm shadow transition">Verify & Continue</button>
+        </form>
+        <button onclick="resetAuthStep()" class="mt-3 text-xs text-gray-500 hover:text-red-600 underline">Back to details</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- POST / EDIT AD MODAL WITH IMAGE UPLOAD -->
+  <div id="postModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative my-8">
+      <button onclick="closePostModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-xl font-bold text-gray-900 mb-4" id="postModalTitle">Post a New Classified Ad</h3>
+
+      <form id="postForm" onsubmit="saveListing(event)" class="space-y-4">
+        <input type="hidden" id="editListingId">
+        <input type="hidden" id="inputImageBase64">
+        
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelAdTitle">Ad Title *</label>
+          <input type="text" id="inputTitle" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500" placeholder="e.g. Toyota Land Cruiser VXR 2023">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelCategory">Category *</label>
+            <select id="inputCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500 bg-white">
+              <option value="Motors">Motors</option>
+              <option value="Property">Property</option>
+              <option value="Jobs">Jobs</option>
+              <option value="Mobiles">Mobiles & Electronics</option>
+              <option value="Services">Services</option>
+              <option value="Community">Community</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelPrice">Price (AED) *</label>
+            <input type="number" id="inputPrice" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500" placeholder="e.g. 150000">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelEmirate">Emirate / Location *</label>
+            <select id="inputEmirate" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500 bg-white">
+              <option value="Dubai">Dubai</option>
+              <option value="Abu Dhabi">Abu Dhabi</option>
+              <option value="Sharjah">Sharjah</option>
+              <option value="Ajman">Ajman</option>
+              <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelImageUpload">Upload Photo from Computer *</label>
+            <input type="file" id="inputFileUpload" accept="image/*" onchange="handleImageUpload(event)" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer">
+          </div>
+        </div>
+
+        <div id="imagePreviewContainer" class="hidden">
+          <p class="text-xs text-gray-500 mb-1">Image Preview:</p>
+          <img id="imagePreview" src="" alt="Preview" class="w-full h-32 object-cover rounded-lg border border-gray-200">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1" id="labelDesc">Description *</label>
+          <textarea id="inputDesc" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500" placeholder="Describe your item, condition, mileage, features..."></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="closePostModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50" id="cancelBtn">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-bold shadow transition" id="publishBtn">Publish Ad</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FEATURE AD MONETIZATION MODAL (ZIINA PAYMENT INTEGRATION) -->
+  <div id="featureModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeFeatureModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+      
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900">Feature Your Ad</h3>
+        <p class="text-xs text-gray-500 mt-1">Boost your listing to the top of search results with a glowing badge for maximum buyer views.</p>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-4 space-y-3">
+        <div class="flex justify-between text-xs text-gray-600">
+          <span>Daily Feature Rate:</span>
+          <span class="font-bold text-gray-900">0.99 AED / day</span>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">Select Duration (Days):</label>
+          <input type="number" id="featureDays" min="1" value="7" oninput="updateFeatureTotal()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-red-500">
+        </div>
+        <div class="flex justify-between items-center pt-2 border-t border-gray-200 text-sm font-bold text-gray-900">
+          <span>Total Payable:</span>
+          <span id="featureTotalPrice" class="text-red-600 text-lg">6.93 AED</span>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg flex items-center gap-2 mb-6">
+        <i class="fa-solid fa-lock text-emerald-600 text-sm"></i>
+        <span class="text-xs text-emerald-800 font-medium">Secured by Ziina Payment Gateway API</span>
+      </div>
+
+      <button onclick="processZiinaPayment()" class="w-full bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-credit-card"></i> Pay Securely with Ziina (AED)
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 z-50 text-sm font-medium">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMessage">Action completed successfully!</span>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // INITIAL LISTINGS DATABASE WITH LOCAL STORAGE PERSISTENCE
+    const defaultListings = [
+      {
+        id: 1,
+        title: "Toyota Land Cruiser VXR",
+        category: "Motors",
+        price: 212000,
+        emirate: "Dubai",
+        image: "https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=800&q=80",
+        desc: "Pristine condition Toyota Land Cruiser VXR, 2022 model, full option, agency maintained.",
+        user: "Dealer UAE",
+        isFeatured: true
+      },
+      {
+        id: 2,
+        title: "Spacious Luxury Apartment in Dubai Marina",
+        category: "Property",
+        price: 75000,
+        emirate: "Dubai",
+        image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+        desc: "Stunning 2-bedroom apartment with full marina view, pool, gym, and 1 parking slot.",
+        user: "Emirates Real Estate",
+        isFeatured: false
+      },
+      {
+        id: 3,
+        title: "Apple iPhone 14 Pro Max 256GB",
+        category: "Mobiles",
+        price: 3250,
+        emirate: "Abu Dhabi",
+        image: "https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?auto=format&fit=crop&w=800&q=80",
+        desc: "Brand new condition, battery health 99%, unlocked for all operators with box.",
+        user: "Tech Hub DXB",
+        isFeatured: false
+      },
+      {
+        id: 4,
+        title: "Nissan Patrol Platinum V8",
+        category: "Motors",
+        price: 185000,
+        emirate: "Sharjah",
+        image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
+        desc: "White exterior with tan leather interior, zero accidents, single owner.",
+        user: "Ahmad Motors",
+        isFeatured: false
+      }
+    ];
+
+    let listings = JSON.parse(localStorage.getItem('ea_mockup_listings')) || defaultListings;
+    let currentUser = JSON.parse(localStorage.getItem('ea_mockup_user')) || null;
+    let currentCategory = 'All';
+    let currentLang = 'en';
+    let listingToFeatureId = null;
+
+    // TRANSLATIONS DICTIONARY
+    const translations = {
+      en: {
+        bannerText: "Welcome to Mock Up design - EA — The UAE's #1 Marketplace Platform",
+        heroBadge: "UAE's #1 Marketplace",
+        heroTitle: "Buy and Sell Anything in the UAE",
+        heroDesc: "From luxury villas in Dubai and pristine SUVs in Abu Dhabi to electronics and jobs across Sharjah — find it all here.",
+        sectionTitle: "Classified Listings",
+        sortLabel: "Sort:",
+        sortNewest: "Newest First",
+        sortLowHigh: "Price: Low to High",
+        sortHighLow: "Price: High to Low",
+        postAdNav: "POST AN AD",
+        signInNav: "Sign In",
+        signUpNav: "Sign Up",
+        catAll: "All Categories",
+        catMotors: "Motors",
+        catProperty: "Property",
+        catJobs: "Jobs",
+        catMobiles: "Mobiles & Electronics",
+        catServices: "Services",
+        catCommunity: "Community",
+        noListings: "No listings found",
+        noListingsSub: "Try adjusting your search criteria or post the first ad in this category!",
+        postAdNow: "Post an Ad Now",
+        socialConnectTitle: "Connect Your Social Accounts & WhatsApp",
+        socialConnectSub: "Instantly link buyers directly to your WhatsApp, Instagram, and Facebook profile.",
+        footerAbout: "The leading classifieds platform for buying and selling autos, real estate, electronics, and connecting buyers with trusted sellers across the UAE.",
+        footerPopular: "Popular Categories",
+        footerSupport: "Customer Support",
+        footerMonetize: "Seller Monetization",
+        footerMonetizeDesc: "Feature your ads starting at only 0.99 AED/day for maximum buyer views and instant sales!"
+      },
+      ar: {
+        bannerText: "مرحباً بكم في تصميم نموذج - EA — منصة الإعلانات المبوبة الأولى في الإمارات",
+        heroBadge: "السوق الأول في الإمارات",
+        heroTitle: "اشترِ وبع أي شيء في دولة الإمارات",
+        heroDesc: "من الفاخرة في دبي والسيارات الرياضية في أبوظبي إلى الإلكترونيات ووظائف الشارقة — اعثر عليها هنا.",
+        sectionTitle: "الإعلانات المبوبة",
+        sortLabel: "ترتيب حسب:",
+        sortNewest: "الأحدث أولاً",
+        sortLowHigh: "السعر: من الأقل للأعلى",
+        sortHighLow: "السعر: من الأعلى للأقل",
+        postAdNav: "أضف إعلاناً",
+        signInNav: "تسجيل الدخول",
+        signUpNav: "حساب جديد",
+        catAll: "جميع الفئات",
+        catMotors: "السيارات والمركبات",
+        catProperty: "العقارات",
+        catJobs: "الوظائف",
+        catMobiles: "الهواتف والإلكترونيات",
+        catServices: "الخدمات",
+        catCommunity: "المجتمع",
+        noListings: "لم يتم العثور على إعلانات",
+        noListingsSub: "جرب تعديل بحثك أو قم بإضافة أول إعلان في هذه الفئة!",
+        postAdNow: "أضف إعلاناً الآن",
+        socialConnectTitle: "اربط حسابات التواصل الاجتماعي وواتساب",
+        socialConnectSub: "اربط المشترين مباشرة بواتساب وإنستغرام وفيسبوك الخاص بك.",
+        footerAbout: "منصة الإعلانات المبوبة الرائدة لبيع وشراء السيارات والعقارات والإلكترونيات وربط المشترين بالبائعين في الإمارات.",
+        footerPopular: "الفئات الشائعة",
+        footerSupport: "دعم العملاء",
+        footerMonetize: "تحقيق الدخل للبائعين",
+        footerMonetizeDesc: "اميز إعلانك ابتداءً من 0.99 درهم فقط في اليوم للحصول على أقصى مشاهدات!"
+      }
+    };
+
+    // INITIALIZE APP
+    window.onload = function() {
+      updateAuthUI();
+      renderListings();
+    };
+
+    // LANGUAGE TOGGLE
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      const htmlEl = document.documentElement;
+      htmlEl.setAttribute('lang', currentLang);
+      htmlEl.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+      
+      document.getElementById('langBtnText').innerText = currentLang === 'en' ? 'عربي' : 'English';
+      
+      const t = translations[currentLang];
+      document.getElementById('bannerText').innerText = t.bannerText;
+      document.getElementById('heroBadge').innerText = t.heroBadge;
+      document.getElementById('heroTitle').innerText = t.heroTitle;
+      document.getElementById('heroDesc').innerText = t.heroDesc;
+      document.getElementById('sectionTitle').innerText = t.sectionTitle;
+      document.getElementById('sortLabel').innerText = t.sortLabel;
+      document.getElementById('sortNewest').innerText = t.sortNewest;
+      document.getElementById('sortLowHigh').innerText = t.sortLowHigh;
+      document.getElementById('sortHighLow').innerText = t.sortHighLow;
+      document.getElementById('postAdNav').innerText = t.postAdNav;
+      document.getElementById('signInNav').innerText = t.signInNav;
+      document.getElementById('signUpNav').innerText = t.signUpNav;
+      document.getElementById('catAllBtn').innerText = t.catAll;
+      document.getElementById('catMotorsBtn').innerText = t.catMotors;
+      document.getElementById('catPropertyBtn').innerText = t.catProperty;
+      document.getElementById('catJobsBtn').innerText = t.catJobs;
+      document.getElementById('catMobilesBtn').innerText = t.catMobiles;
+      document.getElementById('catServicesBtn').innerText = t.catServices;
+      document.getElementById('catCommunityBtn').innerText = t.catCommunity;
+      document.getElementById('noListings').innerText = t.noListings;
+      document.getElementById('noListingsSub').innerText = t.noListingsSub;
+      document.getElementById('postAdNow').innerText = t.postAdNow;
+      document.getElementById('socialConnectTitle').innerText = t.socialConnectTitle;
+      document.getElementById('socialConnectSub').innerText = t.socialConnectSub;
+      document.getElementById('footerAbout').innerText = t.footerAbout;
+      document.getElementById('footerPopular').innerText = t.footerPopular;
+      document.getElementById('footerSupport').innerText = t.footerSupport;
+      document.getElementById('footerMonetize').innerText = t.footerMonetize;
+      document.getElementById('footerMonetizeDesc').innerText = t.footerMonetizeDesc;
+
+      renderListings();
+    }
+
+    // RENDER LISTINGS GRID
+    function renderListings() {
+      const grid = document.getElementById('listingsGrid');
+      const emptyState = document.getElementById('emptyState');
+      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      const selectedEmirate = document.getElementById('emirateSelect').value;
+      const sortBy = document.getElementById('sortSelect').value;
+
+      let filtered = listings.filter(item => {
+        const matchesCat = currentCategory === 'All' || item.category === currentCategory;
+        const matchesEmirate = selectedEmirate === 'All UAE' || item.emirate === selectedEmirate;
+        const matchesSearch = item.title.toLowerCase().includes(searchQuery) || item.desc.toLowerCase().includes(searchQuery);
+        return matchesCat && matchesEmirate && matchesSearch;
+      });
+
+      filtered.sort((a, b) => {
+        if (a.isFeatured && !b.isFeatured) return -1;
+        if (!a.isFeatured && b.isFeatured) return 1;
+        if (sortBy === 'newest') return b.id - a.id;
+        if (sortBy === 'low-high') return a.price - b.price;
+        if (sortBy === 'high-low') return b.price - a.price;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => `
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between relative group">
+          ${item.isFeatured ? '<div class="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow z-10 flex items-center gap-1"><i class="fa-solid fa-bolt"></i> FEATURED</div>' : ''}
+          
+          <div>
+            <div class="relative h-48 overflow-hidden bg-gray-100">
+              <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              <span class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-lg font-medium">
+                ${item.category}
+              </span>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs text-gray-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-red-600"></i> ${item.emirate}</span>
+                <span class="text-xs text-gray-400">By ${item.user}</span>
+              </div>
+              <h4 class="font-bold text-gray-900 text-base line-clamp-1 mb-1">${item.title}</h4>
+              <p class="text-xs text-gray-500 line-clamp-2 mb-3">${item.desc}</p>
+              <div class="text-lg font-extrabold text-red-600">
+                AED ${item.price.toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 pt-0 border-t border-gray-100 flex items-center justify-between gap-2 mt-2">
+            <a href="https://wa.me/971500000000?text=Hi,%20I'm%20interested%20in%20your%20listing:%20${encodeURIComponent(item.title)}" target="_blank" class="flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs py-2 px-3 rounded-lg text-center transition flex items-center justify-center gap-1.5">
+              <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+            </a>
+            ${!item.isFeatured ? `<button onclick="openFeatureModal(${item.id})" class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold text-xs py-2 px-3 rounded-lg transition" title="Feature Ad (0.99 AED/day)"><i class="fa-solid fa-bolt"></i> Feature</button>` : ''}
+            ${currentUser && currentUser.name === item.user ? `<button onclick="editListing(${item.id})" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-2 px-3 rounded-lg"><i class="fa-solid fa-pen"></i></button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('header .overflow-x-auto button').forEach(btn => {
+        btn.classList.remove('border-b-2', 'border-red-600', 'text-red-600', 'font-semibold');
+      });
+      event.target.classList.add('border-b-2', 'border-red-600', 'text-red-600', 'font-semibold');
+      renderListings();
+    }
+
+    function handleSearch() {
+      renderListings();
+    }
+
+    // AUTH SYSTEM WITH OTP
+    let isRegisterMode = false;
+    let pendingAuthData = null;
+
+    function openAuthModal(mode) {
+      isRegisterMode = mode === 'signup';
+      document.getElementById('authModal').classList.remove('hidden');
+      document.getElementById('authStep1').classList.remove('hidden');
+      document.getElementById('authStep2').classList.add('hidden');
+      
+      document.getElementById('authTitle').innerText = isRegisterMode ? 'Create Account - Mock Up design' : 'Sign In to Mock Up design';
+      document.getElementById('authSubmitBtn').innerText = isRegisterMode ? 'Send OTP Code' : 'Sign In with OTP';
+      document.getElementById('nameFieldGroup').classList.toggle('hidden', !isRegisterMode);
+      document.getElementById('roleFieldGroup').classList.toggle('hidden', !isRegisterMode);
+      document.getElementById('authToggleText').innerText = isRegisterMode ? 'Already have an account?' : "Don't have an account?";
+      document.getElementById('authToggleBtn').innerText = isRegisterMode ? 'Sign In' : 'Sign Up';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function toggleAuthMode() {
+      openAuthModal(isRegisterMode ? 'signin' : 'signup');
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const contact = document.getElementById('authContactInput').value;
+      const name = isRegisterMode ? document.getElementById('authNameInput').value : (contact.split('@')[0] || 'User');
+      const role = isRegisterMode ? document.getElementById('authRoleSelect').value : 'Seller';
+
+      pendingAuthData = { name, contact, role };
+      
+      document.getElementById('authStep1').classList.add('hidden');
+      document.getElementById('authStep2').classList.remove('hidden');
+      showToast('OTP code sent to your email/phone! Use 1234', 'info');
+    }
+
+    function handleOtpVerify(e) {
+      e.preventDefault();
+      const otp = document.getElementById('otpInput').value;
+      if (otp !== '1234') {
+        showToast('Invalid OTP code! Please use 1234', 'error');
+        return;
+      }
+
+      currentUser = pendingAuthData;
+      localStorage.setItem('ea_mockup_user', JSON.stringify(currentUser));
+      closeAuthModal();
+      updateAuthUI();
+      showToast(`Welcome back, ${currentUser.name}!`, 'success');
+    }
+
+    function resetAuthStep() {
+      document.getElementById('authStep2').classList.add('hidden');
+      document.getElementById('authStep1').classList.remove('hidden');
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      localStorage.removeItem('ea_mockup_user');
+      updateAuthUI();
+      showToast('Signed out successfully', 'success');
+    }
+
+    function updateAuthUI() {
+      const authArea = document.getElementById('authArea');
+      const userProfileArea = document.getElementById('userProfileArea');
+      if (currentUser) {
+        authArea.classList.add('hidden');
+        userProfileArea.classList.remove('hidden');
+        document.getElementById('userNameDisplay').innerText = currentUser.name;
+        document.getElementById('userRoleBadge').innerText = currentUser.role;
+        document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+      } else {
+        userProfileArea.classList.add('hidden');
+        authArea.classList.remove('hidden');
+      }
+    }
+
+    // IMAGE FILE UPLOAD HANDLER
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(uploadEvent) {
+        const base64String = uploadEvent.target.result;
+        document.getElementById('inputImageBase64').value = base64String;
+        document.getElementById('imagePreview').src = base64String;
+        document.getElementById('imagePreviewContainer').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // POST / EDIT AD MODAL
+    function openPostModal() {
+      if (!currentUser) {
+        openAuthModal('signin');
+        showToast('Please sign in to post an ad', 'error');
+        return;
+      }
+      document.getElementById('postModal').classList.remove('hidden');
+      document.getElementById('postForm').reset();
+      document.getElementById('editListingId').value = '';
+      document.getElementById('inputImageBase64').value = '';
+      document.getElementById('imagePreviewContainer').classList.add('hidden');
+      document.getElementById('postModalTitle').innerText = 'Post a New Classified Ad';
+    }
+
+    function closePostModal() {
+      document.getElementById('postModal').classList.add('hidden');
+    }
+
+    function saveListing(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editListingId').value;
+      const title = document.getElementById('inputTitle').value;
+      const category = document.getElementById('inputCategory').value;
+      const price = parseFloat(document.getElementById('inputPrice').value);
+      const emirate = document.getElementById('inputEmirate').value;
+      let image = document.getElementById('inputImageBase64').value;
+      const desc = document.getElementById('inputDesc').value;
+
+      if (!image && !editId) {
+        showToast('Please upload an image for your ad', 'error');
+        return;
+      }
+
+      if (editId) {
+        const index = listings.findIndex(l => l.id == editId);
+        if (index > -1) {
+          if (!image) image = listings[index].image; // keep existing image if not changed
+          listings[index] = { ...listings[index], title, category, price, emirate, image, desc };
+        }
+        showToast('Ad updated successfully!', 'success');
+      } else {
+        const newAd = {
+          id: Date.now(),
+          title,
+          category,
+          price,
+          emirate,
+          image,
+          desc,
+          user: currentUser.name,
+          isFeatured: false
+        };
+        listings.unshift(newAd);
+        showToast('Ad published successfully!', 'success');
+      }
+
+      localStorage.setItem('ea_mockup_listings', JSON.stringify(listings));
+      closePostModal();
+      renderListings();
+    }
+
+    function editListing(id) {
+      const item = listings.find(l => l.id === id);
+      if (!item) return;
+      openPostModal();
+      document.getElementById('postModalTitle').innerText = 'Edit Classified Ad';
+      document.getElementById('editListingId').value = item.id;
+      document.getElementById('inputTitle').value = item.title;
+      document.getElementById('inputCategory').value = item.category;
+      document.getElementById('inputPrice').value = item.price;
+      document.getElementById('inputEmirate').value = item.emirate;
+      document.getElementById('inputImageBase64').value = item.image;
+      document.getElementById('imagePreview').src = item.image;
+      document.getElementById('imagePreviewContainer').classList.remove('hidden');
+      document.getElementById('inputDesc').value = item.desc;
+    }
+
+    // FEATURE AD MONETIZATION & ZIINA PAYMENT INTEGRATION
+    function openFeatureModal(id) {
+      if (!currentUser) {
+        openAuthModal('signin');
+        showToast('Please sign in to feature your ad', 'error');
+        return;
+      }
+      listingToFeatureId = id;
+      document.getElementById('featureModal').classList.remove('hidden');
+      updateFeatureTotal();
+    }
+
+    function closeFeatureModal() {
+      document.getElementById('featureModal').classList.add('hidden');
+      listingToFeatureId = null;
+    }
+
+    function updateFeatureTotal() {
+      const days = parseInt(document.getElementById('featureDays').value) || 1;
+      const total = (days * 0.99).toFixed(2);
+      document.getElementById('featureTotalPrice').innerText = `${total} AED`;
+    }
+
+    function processZiinaPayment() {
+      if (!listingToFeatureId) return;
+      const days = parseInt(document.getElementById('featureDays').value) || 1;
+      const total = (days * 0.99).toFixed(2);
+
+      // Ziina API Key Integration simulated session
+      const ziinaApiKey = "5lrb2J5b8DA7wciGYuPJupOA80PeBRN1yKvzSjOlAfbMI5lTjdDNPJ/RTeoRy6gK";
+      console.log("Initiating Ziina Payment with API Key:", ziinaApiKey);
+
+      const index = listings.findIndex(l => l.id === listingToFeatureId);
+      if (index > -1) {
+        listings[index].isFeatured = true;
+        const featuredItem = listings.splice(index, 1)[0];
+        listings.unshift(featuredItem);
+        localStorage.setItem('ea_mockup_listings', JSON.stringify(listings));
+        renderListings();
+      }
+
+      closeFeatureModal();
+      showToast(`🎉 Success! Paid AED ${total} via Ziina. Your ad is now featured for ${days} days!`, 'success');
+    }
+
+    // TOAST NOTIFICATION HELPER
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMessage.innerText = message;
+      if (type === 'success') {
+        toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+      } else if (type === 'error') {
+        toastIcon.className = 'fa-solid fa-circle-exclamation text-red-400 text-lg';
+      } else {
+        toastIcon.className = 'fa-solid fa-circle-info text-sky-400 text-lg';
+      }
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
